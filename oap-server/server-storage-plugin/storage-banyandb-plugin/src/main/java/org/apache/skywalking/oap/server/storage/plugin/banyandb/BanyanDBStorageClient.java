@@ -31,6 +31,7 @@ import org.apache.skywalking.banyandb.v1.client.grpc.exception.BanyanDBException
 import org.apache.skywalking.banyandb.v1.client.metadata.Measure;
 import org.apache.skywalking.banyandb.v1.client.metadata.Property;
 import org.apache.skywalking.banyandb.v1.client.metadata.Stream;
+import org.apache.skywalking.banyandb.v1.client.metadata.TopNAggregation;
 import org.apache.skywalking.oap.server.library.client.Client;
 import org.apache.skywalking.oap.server.library.client.healthcheck.DelegatedHealthChecker;
 import org.apache.skywalking.oap.server.library.client.healthcheck.HealthCheckable;
@@ -143,6 +144,16 @@ public class BanyanDBStorageClient implements Client, HealthCheckable {
         } catch (BanyanDBException ex) {
             healthChecker.unHealth(ex);
             throw new IOException("fail to define stream", ex);
+        }
+    }
+
+    public void define(TopNAggregation topNAggregation) throws IOException {
+        try {
+            this.client.define(topNAggregation);
+            this.healthChecker.health();
+        } catch (BanyanDBException ex) {
+            healthChecker.unHealth(ex);
+            throw new IOException("fail to define TopNAggregation", ex);
         }
     }
 
